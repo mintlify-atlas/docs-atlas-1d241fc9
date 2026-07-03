@@ -171,15 +171,27 @@ import { Collapsible } from '@/components/ui/collapsible';
 
 A cross-platform icon component that uses native **SF Symbols** on iOS (via `expo-symbols`) and **MaterialIcons** on Android and web (via `@expo/vector-icons`). React Native's platform-specific file resolution (`*.ios.tsx`) selects the correct implementation automatically at build time.
 
-**Props (shared interface):**
+**Props:**
+
+The two platform implementations share the same logical shape but differ in their `style` type:
 
 ```ts
+// Android / web (icon-symbol.tsx)
 {
-  name: IconSymbolName;             // SF Symbol name key (see mapping below)
+  name: IconSymbolName;             // Key from the SF Symbol → Material Icon MAPPING
   size?: number;                    // Default: 24
   color: string | OpaqueColorValue; // Icon tint color
-  style?: StyleProp<TextStyle | ViewStyle>;
-  weight?: SymbolWeight;            // iOS only — default: 'regular'
+  style?: StyleProp<TextStyle>;     // Applied directly to the MaterialIcons element
+  weight?: SymbolWeight;            // Accepted but unused on Android/web
+}
+
+// iOS (icon-symbol.ios.tsx)
+{
+  name: SymbolViewProps['name'];    // Any valid SF Symbol name
+  size?: number;                    // Default: 24
+  color: string;                    // Tint color passed to SymbolView
+  style?: StyleProp<ViewStyle>;     // Wraps the SymbolView container
+  weight?: SymbolWeight;            // Default: 'regular'
 }
 ```
 

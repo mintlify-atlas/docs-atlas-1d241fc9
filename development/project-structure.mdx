@@ -83,5 +83,5 @@ Expo Router treats the `app/` directory as a route tree. The project currently d
 The deep-link URL scheme is `wordlelotr://`, defined by the `scheme` field in `app.json`. This means the home screen is reachable at `wordlelotr://screen/home` from external apps or device links.
 
 <Note>
-  This project uses Expo's New Architecture (`newArchEnabled: true`), React Compiler (`reactCompiler: true`), and typed routes (`typedRoutes: true`). All three are enabled in `app.json` under the `experiments` block, providing better runtime performance, automatic memoization, and compile-time route safety respectively.
+  This project uses Expo's New Architecture (`newArchEnabled: true`), React Compiler (`reactCompiler: true`), and typed routes (`typedRoutes: true`). `newArchEnabled` is set at the root of the `expo` object in `app.json`, while `reactCompiler` and `typedRoutes` are nested under the `experiments` block. Together they provide better runtime performance, automatic memoization, and compile-time route safety.
 </Note>

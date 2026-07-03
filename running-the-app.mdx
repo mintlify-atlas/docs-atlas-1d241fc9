@@ -1,5 +1,5 @@
 ---
-title: "Run Wordle LOTR with Expo Dev Server"
+title: "Run Wordle LOTR on Android, iOS, and Web with Expo"
 sidebarTitle: "Running the App"
 description: "Start the Expo development server, launch Wordle LOTR on Android or iOS simulators, and use the reset-project script to restore defaults."
 ---
@@ -13,9 +13,9 @@ Once the repository is cloned and dependencies are installed, you can start the 
 | `start` | `npm start` | Starts the Expo development server (Metro bundler) |
 | `android` | `npm run android` | Builds and runs the app on a connected Android device or emulator |
 | `ios` | `npm run ios` | Builds and runs the app on the iOS simulator (macOS only) |
-| `web` | `npm run web` | Launches the web build of the app via Expo |
+| `web` | `npm run web` | Starts the Expo web development server (`expo start --web`) |
 | `lint` | `npm run lint` | Runs ESLint against the codebase using `expo lint` |
-| `reset-project` | `npm run reset-project` | Runs the reset script to restore the project to a clean initial state |
+| `reset-project` | `npm run reset-project` | Moves `app/`, `components/`, `hooks/`, `constants/`, and `scripts/` to `/app-example` (or deletes them) and creates a blank `app/index.tsx` and `app/_layout.tsx` |
 
 ## Starting the Dev Server
 
@@ -49,16 +49,16 @@ Expo will boot the iOS simulator (or use one that is already open) and install t
 
 ## Resetting the Project
 
-The `reset-project` script runs `scripts/reset-project.js`, which clears generated files and restores the project directory to its initial scaffolded state:
+The `reset-project` script runs `scripts/reset-project.js`, which removes the existing `app/`, `components/`, `hooks/`, `constants/`, and `scripts/` directories (optionally backing them up to `/app-example`) and replaces them with a minimal `app/index.tsx` and `app/_layout.tsx`. It is an Expo scaffold utility intended to strip the starter template back to a blank slate:
 
 ```bash
 npm run reset-project
 ```
 
 <Warning>
-  Running `reset-project` is a destructive operation. It will delete generated output and overwrite project files back to their defaults. Any local changes that have not been committed to version control will be lost. Make sure to commit or stash your work before running this script.
+  Running `reset-project` is a destructive operation. It will delete (or move to `/app-example`) the `app/`, `components/`, `hooks/`, `constants/`, and `scripts/` directories and replace them with a blank scaffold. Any local changes that have not been committed to version control will be permanently lost. Make sure to commit or stash your work before running this script.
 </Warning>
 
 <Tip>
-  Two things worth noting from `app.json` before you start developing: the app is locked to portrait orientation (`"orientation": "portrait"`), so landscape layouts are intentionally unsupported. React Native's new architecture is also enabled (`"newArchEnabled": true`), meaning the app uses the Fabric renderer and the new JSI-based bridge by default.
+  Three things worth noting from `app.json` before you start developing: the app is locked to portrait orientation (`"orientation": "portrait"`), so landscape layouts are intentionally unsupported. React Native's new architecture is enabled (`"newArchEnabled": true`), meaning the app uses the Fabric renderer and the new JSI-based bridge by default. Typed routes are also enabled (`"typedRoutes": true`), giving you full TypeScript autocomplete for all expo-router navigation paths.
 </Tip>

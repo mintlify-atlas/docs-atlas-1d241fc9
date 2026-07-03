@@ -1,5 +1,5 @@
 ---
-title: "Hints, Clues, and Revealing the Answer"
+title: "Wordle LOTR Hints System: Clues and Revealing Answers"
 sidebarTitle: "Hints & Answers"
 description: "Wordle LOTR shows two lore-based hints for every word. After three wrong guesses, you can reveal the answer and read the full lore entry."
 ---
@@ -36,16 +36,16 @@ Notice that Hint 1 tends to give a richer, more detailed description — sometim
 
 ## Reveal Answer
 
-If you have submitted **3 incorrect guesses** and still haven't found the word, a green button appears below the **Aceptar** button:
+If you have made **3 or more attempts** and still haven't found the word, a green button appears below the **Aceptar** button:
 
 **"Presiona aqui para ver la respuesta"**
 
 Tapping it sets the `showAnswer` flag to `true`, and the hidden word is displayed in large white text on screen (styled via `answerText` at `fontSize: 22`, `fontWeight: bold`). The answer is rendered exactly as it appears in the dictionary — with original casing (e.g., **Vilya**, not **VILYA**).
 
-Once the answer is shown, it stays visible until you press **Nueva Palabra**, which resets all state including `showAnswer`.
+Once the answer is shown, it stays visible for the remainder of the round. Pressing **Nueva Palabra** resets the attempt counter and other state, but `showAnswer` is not explicitly cleared in the reset flow — the answer text persists until the app session ends or the component unmounts.
 
 <Note>
-  The reveal button intentionally only appears after 3 failed attempts. This gives you a meaningful window of challenge — enough attempts to apply the color feedback and both hints — before the answer is made available. Skipping straight to the answer on the first guess is not possible by design.
+  The reveal button intentionally only appears after 3 or more attempts (`counter >= 3`). This gives you a meaningful window of challenge — enough attempts to apply the color feedback and both hints — before the answer is made available. Skipping straight to the answer on the first guess is not possible by design.
 </Note>
 
 ## Confetti on Win
@@ -66,8 +66,7 @@ The **Nueva Palabra** button at the bottom of the screen completely resets the r
 - Clears the text input (`char` → `''`)
 - Resets the color array (`colors` → `[]`), returning all tiles to dark gray
 - Clears the feedback message (`mensaje` → `''`)
-- Resets the attempt counter (`counter` → `0`), hiding the reveal button
-- Hides any previously revealed answer (`showAnswer` is reset via the counter reset flow)
+- Resets the attempt counter (`counter` → `0`), which hides the reveal button (note: `showAnswer` is not explicitly reset by this flow — if the answer was already displayed, the answer text remains visible until the component unmounts or the app restarts)
 - Clears the confetti state (`showConfetti` → `false`)
 
 The new word's hints (Pista 1 and Pista 2) appear immediately, and the grid resizes to match the new word's length — so a 3-letter word like **Sam** will show 3 tiles while a 7-letter word like **Angband** will show 7.

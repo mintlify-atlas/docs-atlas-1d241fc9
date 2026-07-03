@@ -1,5 +1,5 @@
 ---
-title: "How to Play Wordle LOTR: Rules and Game Loop"
+title: "How to Play Wordle LOTR: Game Rules and Loop Guide"
 sidebarTitle: "How to Play"
 description: "Learn the Wordle LOTR game loop: guess a hidden Middle-earth word, read color feedback on each letter, use hints, and earn confetti for a correct answer."
 ---
@@ -30,13 +30,13 @@ Wordle LOTR is a word-guessing game set in the world of Middle-earth. Each round
     See the [Color System](/gameplay/color-system) page for full details on how the feedback algorithm works.
   </Step>
   <Step title="Repeat until you win or reveal the answer">
-    Use the color feedback to refine your next guess and try again. There is no hard limit on the number of guesses, but after **3 failed attempts** a reveal button appears. If you get the word exactly right at any point, a confetti animation fires to celebrate your win.
+    Use the color feedback to refine your next guess and try again. There is no hard limit on the number of guesses, but after **3 or more attempts** a reveal button appears. If you get the word exactly right at any point, a confetti animation fires to celebrate your win.
   </Step>
 </Steps>
 
 ## Scoring and Attempts
 
-Wordle LOTR does not cut you off after a fixed number of guesses — you can keep trying as long as you like. However, once you have submitted **3 incorrect guesses**, a button labeled **"Presiona aqui para ver la respuesta"** appears below the **Aceptar** button. Tapping it reveals the hidden word in large white text on screen. The reveal is completely optional: you can ignore the button and continue guessing if you'd rather work it out yourself.
+Wordle LOTR does not cut you off after a fixed number of guesses — you can keep trying as long as you like. However, once you have made **3 or more attempts**, a button labeled **"Presiona aqui para ver la respuesta"** appears below the **Aceptar** button. Tapping it reveals the hidden word in large white text on screen. The reveal is completely optional: you can ignore the button and continue guessing if you'd rather work it out yourself.
 
 There is no points system or timer in the current version of the game. The focus is on exploration of Tolkien's lore, not competitive speed.
 
@@ -47,8 +47,8 @@ The **Nueva Palabra** button at the bottom of the screen resets the entire game 
 - A new word is chosen at random from the dictionary
 - The letter grid is cleared (all tiles return to dark gray)
 - The text input is emptied
-- The attempt counter resets to zero
-- Any feedback message, the reveal button, and the revealed answer are all hidden
+- The attempt counter resets to zero, which hides the reveal button
+- Any feedback message is cleared
 - The confetti state is cleared
 
 Press **Nueva Palabra** any time — whether you have just won, just revealed the answer, or simply want to try a different word.

@@ -93,19 +93,19 @@ All style rules for the game screen live in `styles/homeStyle.ts` and are export
 |---|---|---|
 | `container` | Root `View` | `flex: 1`, `paddingTop: 80`, `alignItems: 'center'`, `backgroundColor: '#1a202c'` |
 | `wordDisplay` | "WORD QUEST" title `Text` | `color: '#ffffff'`, `fontSize: 24`, `fontWeight: 'bold'`, `marginBottom: 20` |
-| `gridContainer` | Letter tile row `View` | `flexDirection: 'row'`, `gap: 6`, `height: 60`, `justifyContent: 'center'`, `alignItems: 'center'` |
+| `gridContainer` | Letter tile row `View` | `flexDirection: 'row'`, `gap: 6`, `height: 60`, `width: '100%'`, `justifyContent: 'center'`, `alignItems: 'center'`, `marginBottom: 20` |
 | `box` | Individual letter tile `View` | `width: 45`, `height: 45`, `borderWidth: 2`, `borderColor: '#4a5568'`, `borderRadius: 4` |
 | `boxText` | Letter inside tile `Text` | `color: '#ffffff'`, `fontSize: 20`, `fontWeight: 'bold'` |
-| `input` | Guess `TextInput` | `width: '80%'`, `height: 55`, `backgroundColor: '#2d3748'`, `borderRadius: 8`, `fontSize: 18`, `textAlign: 'center'` |
+| `input` | Guess `TextInput` | `width: '80%'`, `height: 55`, `backgroundColor: '#2d3748'`, `color: '#ffffff'`, `paddingHorizontal: 15`, `borderRadius: 8`, `fontSize: 18`, `textAlign: 'center'`, `marginBottom: 10` |
 | `messageContainer` | Feedback message wrapper `View` | `height: 40`, `justifyContent: 'center'` |
 | `messageText` | Correct/incorrect `Text` | `fontSize: 16`, `fontWeight: 'bold'`, `textAlign: 'center'` |
-| `hintContainer` | Hint block wrapper `View` | `height: 120`, `width: '90%'`, `justifyContent: 'center'`, `alignItems: 'center'` |
-| `hint` | Hint text `Text` | `color: '#a0aec0'`, `fontStyle: 'italic'`, `fontSize: 14`, `lineHeight: 20` |
-| `acceptButton` | "Aceptar" submit `Pressable` | `width: '80%'`, `height: 55`, `backgroundColor: '#132f4e'`, `borderColor: '#4180ae'`, `borderRadius: 8` |
+| `hintContainer` | Hint block wrapper `View` | `height: 120`, `width: '90%'`, `justifyContent: 'center'`, `alignItems: 'center'`, `marginBottom: 10` |
+| `hint` | Hint text `Text` | `color: '#a0aec0'`, `fontStyle: 'italic'`, `textAlign: 'center'`, `fontSize: 14`, `lineHeight: 20`, `marginEnd: 50`, `marginStart: 50` |
+| `acceptButton` | "Aceptar" submit `Pressable` | `width: '80%'`, `height: 55`, `backgroundColor: '#132f4e'`, `borderWidth: 1`, `borderColor: '#4180ae'`, `borderRadius: 8`, `alignItems: 'center'`, `justifyContent: 'center'`, `marginTop: 10`, `marginBottom: 10` |
 | `acceptButtonText` | Submit button label `Text` | `color: '#ffffff'`, `fontSize: 16`, `fontWeight: 'bold'` |
-| `answerButton` | "Ver respuesta" reveal `Pressable` | `width: '80%'`, `backgroundColor: '#38a169'`, `borderColor: '#68d391'`, `borderRadius: 8`, `paddingVertical: 14` |
+| `answerButton` | "Ver respuesta" reveal `Pressable` | `width: '80%'`, `backgroundColor: '#38a169'`, `paddingVertical: 14`, `paddingHorizontal: 20`, `borderRadius: 8`, `alignItems: 'center'`, `justifyContent: 'center'`, `marginTop: 10`, `borderWidth: 1`, `borderColor: '#68d391'` |
 | `answerButtonText` | Reveal button label `Text` | `color: '#ffffff'`, `fontSize: 16`, `fontWeight: 'bold'` |
-| `answerText` | Revealed answer `Text` | `color: '#ffffff'`, `fontSize: 22`, `fontWeight: 'bold'`, `textAlign: 'center'` |
+| `answerText` | Revealed answer `Text` | `color: '#ffffff'`, `fontSize: 22`, `fontWeight: 'bold'`, `textAlign: 'center'`, `marginTop: 10` |
 | `refreshButton` | "Nueva Palabra" `Pressable` | `marginTop: 'auto'`, `marginBottom: 90`, `paddingVertical: 12`, `paddingHorizontal: 30`, `backgroundColor: '#4a5568'`, `borderRadius: 5` |
 | `label` | Generic label `Text` | `color: '#a0aec0'`, `fontSize: 14`, `marginBottom: 5` |
 

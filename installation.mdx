@@ -1,7 +1,7 @@
 ---
 title: "Install Wordle LOTR on Android or Build from Source"
 sidebarTitle: "Installation"
-description: "Download the Wordle LOTR APK to install directly on Android, or clone the repository and build locally with Expo and Node.js."
+description: "Download the Wordle LOTR APK to sideload on any Android device, or clone the repository and build locally for Android and iOS with Expo and Node.js."
 ---
 
 There are two ways to get Wordle LOTR running on your device. The quickest path is to download the pre-built APK and sideload it onto any Android device — no developer tools required. If you want to run the app on iOS, experiment with the code, or contribute to the project, you can clone the repository and build it locally using Expo and Node.js.
@@ -41,11 +41,8 @@ There are two ways to get Wordle LOTR running on your device. The quickest path 
 
     - **Node.js 18 or later** — [nodejs.org](https://nodejs.org)
     - **Git** — [git-scm.com](https://git-scm.com)
-    - **Expo CLI** — install globally with:
 
-    ```bash
-    npm install -g expo-cli
-    ```
+    No global Expo CLI installation is needed. All Expo commands are invoked via `npx expo`, which is included when you install the project dependencies.
   </Step>
   <Step title="Clone the repository">
     ```bash

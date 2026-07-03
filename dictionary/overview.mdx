@@ -1,10 +1,10 @@
 ---
-title: "Middle-earth Dictionary: Word Bank Overview"
+title: "Wordle LOTR Word Bank: 54 Middle-earth Dictionary Terms"
 sidebarTitle: "Overview"
-description: "The Wordle LOTR dictionary contains 50+ Middle-earth terms spanning characters, locations, rivers, kingdoms, divine beings, artifacts, and peoples."
+description: "The Wordle LOTR dictionary contains 54 Middle-earth terms spanning characters, locations, rivers, kingdoms, divine beings, artifacts, and peoples."
 ---
 
-The Wordle LOTR dictionary is the core word bank of the game — a carefully curated collection of over 50 terms drawn directly from Tolkien's legendarium. Spanning the First Age through the Fourth Age, the words touch every corner of Middle-earth's history: mighty kingdoms, ancient rivers, divine hierarchies, legendary weapons, and the heroes and races that shaped the fate of the world. Each entry is paired with lore-based hints written in Spanish, giving players meaningful context to guide their guesses while staying true to the source material.
+The Wordle LOTR dictionary is the core word bank of the game — a carefully curated collection of 54 terms drawn directly from Tolkien's legendarium. Spanning the First Age through the Fourth Age, the words touch every corner of Middle-earth's history: mighty kingdoms, ancient rivers, divine hierarchies, legendary weapons, and the heroes and races that shaped the fate of the world. Each entry is paired with lore-based hints written in Spanish, giving players meaningful context to guide their guesses while staying true to the source material.
 
 ## Categories of Words
 
@@ -45,14 +45,18 @@ export interface wordItem {
 | `explicacion2` | `string` | Secondary hint — an additional detail shown alongside the first |
 | `explicacion3` | `string` | Tertiary lore note — stored in the dictionary but not rendered in the game UI |
 
+<Info>
+  Only `explicacion` and `explicacion2` are rendered during gameplay (as "Pista 1" and "Pista 2"). The `explicacion3` field is stored in the dictionary for reference but is never shown to the player.
+</Info>
+
 ## Word Length Distribution
 
-Words in the dictionary range from 3 letters (Sam, Ari, Eru) to 7 or more letters (Angband, Angmar, Sindar). This variation is a deliberate part of the game's difficulty design: the guess grid adapts to the length of the selected word, meaning shorter words require more precision on each tile while longer words allow players more room to narrow down letters. Players have no advance knowledge of the word's length until the grid is revealed, making the opening guess especially consequential.
+Words in the dictionary range from 3 letters (Sam, Ari, Eru, yen) to 7 letters (Angband, Angmar, Sindar). This variation is a deliberate part of the game's difficulty design: the guess grid adapts to the length of the selected word, meaning shorter words require more precision on each tile while longer words allow players more room to narrow down letters. Players have no advance knowledge of the word's length until the grid is revealed, making the opening guess especially consequential.
 
 ## Language Note
 
 While all words in the dictionary come from Tolkien's Elvish and Númenórean naming canon — drawing on Quenya, Sindarin, and anglicised forms — the hint texts (`explicacion`, `explicacion2`, `explicacion3`) are written entirely in Spanish. This reflects the game's primary audience and localisation target. Players who read Spanish will find rich, faithful descriptions of each term; the words themselves, however, remain in their original Tolkien-canon spelling regardless of language setting.
 
 <Tip>
-  See the [full word list](/dictionary/word-list) for all 50+ entries with their complete lore descriptions.
+  See the [full word list](/dictionary/word-list) for all 54 entries with their complete lore descriptions.
 </Tip>
