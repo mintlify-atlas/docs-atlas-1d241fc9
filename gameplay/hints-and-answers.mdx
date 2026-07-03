@@ -1,0 +1,73 @@
+---
+title: "Hints, Clues, and Revealing the Answer"
+sidebarTitle: "Hints & Answers"
+description: "Wordle LOTR shows two lore-based hints for every word. After three wrong guesses, you can reveal the answer and read the full lore entry."
+---
+
+Every round of Wordle LOTR comes with two hints drawn directly from Tolkien's legendarium. These clues describe the word's identity, origin, or role in the stories of Middle-earth and are designed to reward players who know their lore — or to teach those who are just beginning to explore it. Both hints are visible from the very first moment of the round, so you never have to earn them.
+
+## The Two Hints
+
+Each entry in the game's dictionary is a `wordItem` object containing three text fields: `explicacion` (Hint 1), `explicacion2` (Hint 2), and `explicacion3` (not displayed in the current UI). Hints 1 and 2 are shown on screen below the letter grid, labeled **Pista 1** and **Pista 2** respectively.
+
+All hints are written in **Spanish**, which is the game's primary language.
+
+Here are two real examples taken directly from the dictionary:
+
+---
+
+**Word: Vilya**
+
+> **Pista 1:** "el Anillo del Aire, el más magnifico de los Tres Anillos Élficos hechos por Celebrimbor, dado a Gil-galad, llevado por Elrond a Orodruin, llevado al otro lado del Mar, al final de la Tercera Edad."
+
+> **Pista 2:** "El anillo más poderoso de los Tres de los Elfos."
+
+---
+
+**Word: Frodo**
+
+> **Pista 1:** "Noveno-Portador, el sobrino de Bilbo, portador del anillo."
+
+> **Pista 2:** "El protagonista central de la lucha contra Sauron."
+
+---
+
+Notice that Hint 1 tends to give a richer, more detailed description — sometimes including the word's etymology, history, or relationships — while Hint 2 is a shorter, more direct summary statement. Using both together gives you the best chance of identifying the word without needing to reveal the answer.
+
+## Reveal Answer
+
+If you have submitted **3 incorrect guesses** and still haven't found the word, a green button appears below the **Aceptar** button:
+
+**"Presiona aqui para ver la respuesta"**
+
+Tapping it sets the `showAnswer` flag to `true`, and the hidden word is displayed in large white text on screen (styled via `answerText` at `fontSize: 22`, `fontWeight: bold`). The answer is rendered exactly as it appears in the dictionary — with original casing (e.g., **Vilya**, not **VILYA**).
+
+Once the answer is shown, it stays visible until you press **Nueva Palabra**, which resets all state including `showAnswer`.
+
+<Note>
+  The reveal button intentionally only appears after 3 failed attempts. This gives you a meaningful window of challenge — enough attempts to apply the color feedback and both hints — before the answer is made available. Skipping straight to the answer on the first guess is not possible by design.
+</Note>
+
+## Confetti on Win
+
+When your submitted guess matches the secret word exactly (compared case-insensitively via `.toUpperCase()` on both sides), the game sets `showConfetti` to `true` and a confetti animation fires. The cannon originates from the horizontal center of the screen at a fixed y-position of `80` (near the top), raining **120 particles** downward with a fade-out effect. The animation cleans up automatically when it finishes — `onAnimationEnd` resets `showConfetti` to `false`.
+
+A success message, **"¡Excelente!"**, also appears in green (`#60ce4a`) in the message area between the grid and the hints.
+
+<Tip>
+  The confetti effect is powered by the `react-native-confetti-cannon` package. The `fadeOut={true}` prop means the particles gradually become transparent as they fall, giving the celebration a smooth, polished finish rather than an abrupt cut-off.
+</Tip>
+
+## New Word
+
+The **Nueva Palabra** button at the bottom of the screen completely resets the round. When pressed, it increments a `refresh` counter in state, which triggers a `useEffect` that performs all of the following in a single re-render cycle:
+
+- Selects a new random word from the full dictionary (`Math.floor(Math.random() * dictionary.length)`)
+- Clears the text input (`char` → `''`)
+- Resets the color array (`colors` → `[]`), returning all tiles to dark gray
+- Clears the feedback message (`mensaje` → `''`)
+- Resets the attempt counter (`counter` → `0`), hiding the reveal button
+- Hides any previously revealed answer (`showAnswer` is reset via the counter reset flow)
+- Clears the confetti state (`showConfetti` → `false`)
+
+The new word's hints (Pista 1 and Pista 2) appear immediately, and the grid resizes to match the new word's length — so a 3-letter word like **Sam** will show 3 tiles while a 7-letter word like **Angband** will show 7.

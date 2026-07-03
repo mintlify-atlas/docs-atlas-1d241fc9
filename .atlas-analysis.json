@@ -1,0 +1,73 @@
+{
+  "projectType": "frontend",
+  "projectName": "Wordle LOTR",
+  "projectDescription": "A mobile word-guessing game themed around The Lord of the Rings, built with React Native and Expo, featuring a dictionary of Middle-earth characters, places, and lore.",
+  "theme": "almond",
+  "primaryColor": "#ef7025",
+  "lightColor": "#eec9bc",
+  "darkColor": "#4fa1ab",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "running-the-app"
+            ]
+          },
+          {
+            "group": "Gameplay",
+            "pages": [
+              "gameplay/how-to-play",
+              "gameplay/color-system",
+              "gameplay/hints-and-answers"
+            ]
+          },
+          {
+            "group": "Dictionary",
+            "pages": [
+              "dictionary/overview",
+              "dictionary/word-list"
+            ]
+          },
+          {
+            "group": "Development",
+            "pages": [
+              "development/project-structure",
+              "development/components",
+              "development/theming",
+              "development/contributing"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Lord of the Rings themed word-guessing game",
+    "Middle-earth dictionary with 50+ entries (characters, places, artifacts)",
+    "Color-coded letter feedback (correct, present, absent)",
+    "Two contextual hints per word drawn from LOTR lore",
+    "Reveal-answer button after 3 failed attempts",
+    "Confetti celebration on correct guess",
+    "New word button to refresh the challenge",
+    "Built with React Native and Expo for Android and iOS",
+    "Dark fantasy-themed UI with custom styling"
+  ],
+  "publicApiSurface": [
+    "wordItem interface (nombre, explicacion, explicacion2, explicacion3)",
+    "dictionary: wordItem[] export",
+    "Home screen component (app/screen/home.tsx)",
+    "ExternalLink component",
+    "HapticTab component",
+    "ThemedText component",
+    "ThemedView component",
+    "Colors theme constants",
+    "Fonts theme constants",
+    "homeStyle StyleSheet"
+  ]
+}

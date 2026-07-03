@@ -1,0 +1,58 @@
+---
+title: "How to Play Wordle LOTR: Rules and Game Loop"
+sidebarTitle: "How to Play"
+description: "Learn the Wordle LOTR game loop: guess a hidden Middle-earth word, read color feedback on each letter, use hints, and earn confetti for a correct answer."
+---
+
+Wordle LOTR is a word-guessing game set in the world of Middle-earth. Each round presents a hidden word drawn from Tolkien's legendarium — a character name, a place, a river, a divine being, or an artifact — and your goal is to identify it using lore-based hints and the color feedback you receive after every guess. Words range from short names like **Sam** (3 letters) to longer ones like **Angband** (7 letters), so pay close attention to the letter grid before you start typing.
+
+## The Game Loop
+
+<Steps>
+  <Step title="A random Middle-earth word is selected">
+    When the game loads (or when you press **Nueva Palabra**), a word is picked at random from the full dictionary. The letter grid at the top of the screen shows one tile per letter, all starting in their default dark-gray color (`#2d3748`). Count the tiles to know how many letters you are working with — the word can be anywhere from 3 to 7+ letters long.
+  </Step>
+  <Step title="Read the two lore-based hints">
+    Below the grid, two hints are displayed immediately — **Pista 1** and **Pista 2**. Both are visible from the very start of the round and are written in Spanish. They describe the word's role, origin, or meaning within Tolkien's lore. Reading both carefully before guessing can save you several attempts.
+  </Step>
+  <Step title="Type your guess in the text field">
+    Tap the input field and type your guess. The field accepts only the letters A–Z — any digit, space, or special character is stripped out automatically — and all input is auto-capitalized. The field's `maxLength` is locked to the exact length of the current word, so you cannot submit a guess that is too short or too long.
+  </Step>
+  <Step title="Press Aceptar to submit">
+    Tap the **Aceptar** button or press Enter on your keyboard to submit your guess. The game will not process an entry shorter than the required word length, so make sure every tile has a letter before submitting.
+  </Step>
+  <Step title="Read the color feedback on each letter tile">
+    After submission, each tile in the grid changes color to reflect how close that letter is to the secret word:
+    - **Green** — correct letter, correct position
+    - **Yellow** — correct letter, wrong position
+    - **Gray** — letter not in the word at all
+
+    See the [Color System](/gameplay/color-system) page for full details on how the feedback algorithm works.
+  </Step>
+  <Step title="Repeat until you win or reveal the answer">
+    Use the color feedback to refine your next guess and try again. There is no hard limit on the number of guesses, but after **3 failed attempts** a reveal button appears. If you get the word exactly right at any point, a confetti animation fires to celebrate your win.
+  </Step>
+</Steps>
+
+## Scoring and Attempts
+
+Wordle LOTR does not cut you off after a fixed number of guesses — you can keep trying as long as you like. However, once you have submitted **3 incorrect guesses**, a button labeled **"Presiona aqui para ver la respuesta"** appears below the **Aceptar** button. Tapping it reveals the hidden word in large white text on screen. The reveal is completely optional: you can ignore the button and continue guessing if you'd rather work it out yourself.
+
+There is no points system or timer in the current version of the game. The focus is on exploration of Tolkien's lore, not competitive speed.
+
+## Starting a New Word
+
+The **Nueva Palabra** button at the bottom of the screen resets the entire game state in one tap:
+
+- A new word is chosen at random from the dictionary
+- The letter grid is cleared (all tiles return to dark gray)
+- The text input is emptied
+- The attempt counter resets to zero
+- Any feedback message, the reveal button, and the revealed answer are all hidden
+- The confetti state is cleared
+
+Press **Nueva Palabra** any time — whether you have just won, just revealed the answer, or simply want to try a different word.
+
+<Tip>
+  Words come from across the full breadth of Tolkien's lore. Think beyond main characters — the dictionary includes rivers (Anduin, Anga, Sirith), kingdoms and regions (Arnor, Angmar, Harad, Nurn), divine beings (Ainur, Valar, Maia), Elvish peoples (Eldar, Sindar), artifacts (Vilya, Aeglos), and more. Broadening your Tolkien knowledge will give you a real edge.
+</Tip>

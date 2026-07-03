@@ -1,0 +1,265 @@
+---
+title: "Shared Components in the Wordle LOTR Codebase"
+sidebarTitle: "Components"
+description: "Reference for the reusable components in Wordle LOTR: ExternalLink, HapticTab, ThemedText, ThemedView, IconSymbol, Collapsible, and ParallaxScrollView."
+---
+
+The `components/` directory contains shared UI primitives used across the app. While the core game logic lives entirely in `app/screen/home.tsx`, these components provide the cross-platform UI foundation — handling theming, haptics, external links, icons, and layout patterns that any future screen can import and use without duplication.
+
+---
+
+## ExternalLink
+
+**File:** `components/external-link.tsx`
+
+A wrapper around expo-router's `<Link>` that opens URLs in an in-app browser on native platforms rather than handing off to the system browser. On web it falls back to opening the link in a new browser tab via `target="_blank"`.
+
+**Props:**
+
+```ts
+type Props = Omit<ComponentProps<typeof Link>, 'href'> & { href: Href & string };
+```
+
+All props accepted by expo-router's `Link` component are forwarded, with the exception that `href` is typed as `Href & string` (an intersection that ensures the value is both a valid router `Href` and a plain string for `openBrowserAsync`).
+
+**Behavior:**
+
+- On native (`process.env.EXPO_OS !== 'web'`): prevents the default link navigation and instead calls `openBrowserAsync(href, { presentationStyle: WebBrowserPresentationStyle.AUTOMATIC })` from `expo-web-browser`.
+- On web: renders a standard anchor with `target="_blank"`.
+
+**Example:**
+
+```tsx
+import { ExternalLink } from '@/components/external-link';
+
+<ExternalLink href="https://tolkiensociety.org">Tolkien Society</ExternalLink>
+```
+
+---
+
+## HapticTab
+
+**File:** `components/haptic-tab.tsx`
+
+A bottom tab bar button component that adds a soft haptic impact when the user presses down on iOS. It wraps `PlatformPressable` from `@react-navigation/elements` and forwards all standard tab button props.
+
+**Props:**
+
+```ts
+BottomTabBarButtonProps  // from @react-navigation/bottom-tabs
+```
+
+**Behavior:**
+
+- On iOS (`process.env.EXPO_OS === 'ios'`): fires `Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)` on `onPressIn`.
+- On Android and web: no haptic side-effect; press events are forwarded normally.
+
+**Example:**
+
+```tsx
+// Inside a bottom tab navigator screen options:
+tabBarButton: HapticTab
+```
+
+---
+
+## ThemedText
+
+**File:** `components/themed-text.tsx`
+
+A `<Text>` component that automatically resolves its color from the active color scheme using the `Colors` constants. An optional `type` prop selects from a set of pre-defined typographic presets.
+
+**Props:**
+
+```ts
+export type ThemedTextProps = TextProps & {
+  lightColor?: string;   // Override the resolved light-mode text color
+  darkColor?: string;    // Override the resolved dark-mode text color
+  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
+};
+```
+
+**Type presets:**
+
+| `type` | `fontSize` | `fontWeight` | `lineHeight` | Notes |
+|---|---|---|---|---|
+| `default` *(default)* | 16 | — | 24 | Standard body text |
+| `defaultSemiBold` | 16 | `600` | 24 | Emphasized body text |
+| `title` | 32 | `bold` | 32 | Screen or section headings |
+| `subtitle` | 20 | `bold` | — | Secondary headings |
+| `link` | 16 | — | 30 | Teal-colored (`#0a7ea4`) hyperlink text |
+
+**Example:**
+
+```tsx
+import { ThemedText } from '@/components/themed-text';
+
+<ThemedText type="title">Wordle LOTR</ThemedText>
+<ThemedText type="subtitle">Choose your word</ThemedText>
+<ThemedText>Default body text adapts to light and dark mode.</ThemedText>
+```
+
+---
+
+## ThemedView
+
+**File:** `components/themed-view.tsx`
+
+A `<View>` component that resolves its `backgroundColor` from the active color scheme using the `Colors` constants. Accepts the same props as React Native's `View`.
+
+**Props:**
+
+```ts
+export type ThemedViewProps = ViewProps & {
+  lightColor?: string;  // Override the resolved light-mode background color
+  darkColor?: string;   // Override the resolved dark-mode background color
+};
+```
+
+**Example:**
+
+```tsx
+import { ThemedView } from '@/components/themed-view';
+
+<ThemedView style={{ padding: 16 }}>
+  <ThemedText>Content adapts to the current color scheme.</ThemedText>
+</ThemedView>
+```
+
+---
+
+## Collapsible
+
+**File:** `components/ui/collapsible.tsx`
+
+An expandable/collapsible section with a tappable header row containing a title and an animated chevron icon. The chevron rotates 90° when the section is open.
+
+**Props:**
+
+```ts
+PropsWithChildren & { title: string }
+```
+
+| Prop | Type | Description |
+|---|---|---|
+| `title` | `string` | Label displayed in the tappable header row |
+| `children` | `ReactNode` | Content shown when the section is expanded |
+
+**Behavior:**
+
+- Manages its own open/closed state with `useState`.
+- Uses `ThemedText` (type `defaultSemiBold`) for the title and `IconSymbol` (`chevron.right`) for the caret.
+- The chevron color is resolved from `Colors.light.icon` or `Colors.dark.icon` based on the active color scheme.
+
+**Example:**
+
+```tsx
+import { Collapsible } from '@/components/ui/collapsible';
+
+<Collapsible title="What are the Valar?">
+  <ThemedText>
+    The Valar are the fourteen Ainur who entered Arda at its creation.
+  </ThemedText>
+</Collapsible>
+```
+
+---
+
+## IconSymbol
+
+**Files:** `components/ui/icon-symbol.tsx` (Android/web) · `components/ui/icon-symbol.ios.tsx` (iOS)
+
+A cross-platform icon component that uses native **SF Symbols** on iOS (via `expo-symbols`) and **MaterialIcons** on Android and web (via `@expo/vector-icons`). React Native's platform-specific file resolution (`*.ios.tsx`) selects the correct implementation automatically at build time.
+
+**Props (shared interface):**
+
+```ts
+{
+  name: IconSymbolName;             // SF Symbol name key (see mapping below)
+  size?: number;                    // Default: 24
+  color: string | OpaqueColorValue; // Icon tint color
+  style?: StyleProp<TextStyle | ViewStyle>;
+  weight?: SymbolWeight;            // iOS only — default: 'regular'
+}
+```
+
+**iOS implementation** (`icon-symbol.ios.tsx`) renders a `<SymbolView>` from `expo-symbols` with `resizeMode="scaleAspectFit"` and applies `tintColor`.
+
+**Android/web implementation** (`icon-symbol.tsx`) maps SF Symbol names to their MaterialIcons equivalents through a static `MAPPING` object:
+
+| SF Symbol name | Material Icon name |
+|---|---|
+| `house.fill` | `home` |
+| `paperplane.fill` | `send` |
+| `chevron.left.forwardslash.chevron.right` | `code` |
+| `chevron.right` | `chevron-right` |
+
+The `name` prop on Android/web must be one of the keys in the mapping above (`IconSymbolName` is derived from `keyof typeof MAPPING`).
+
+**Example:**
+
+```tsx
+import { IconSymbol } from '@/components/ui/icon-symbol';
+
+<IconSymbol name="chevron.right" size={18} weight="medium" color="#687076" />
+```
+
+---
+
+## ParallaxScrollView
+
+**File:** `components/parallax-scroll-view.tsx`
+
+A scroll view with a parallax header image. As the user scrolls down, the header image translates and scales using `react-native-reanimated` animated styles, creating a depth effect. The header height is fixed at **250 px**.
+
+**Props:**
+
+```ts
+type Props = PropsWithChildren<{
+  headerImage: ReactElement;                           // Element rendered inside the parallax header
+  headerBackgroundColor: { dark: string; light: string }; // Header background for each color scheme
+}>;
+```
+
+**Behavior:**
+
+- Uses `useAnimatedRef` and `useScrollOffset` from `react-native-reanimated` to track scroll position.
+- Applies `translateY` (range `[-125, 0, 187.5]`) and `scale` (range `[2, 1, 1]`) transforms to the header as the scroll offset changes.
+- The content area uses `ThemedView` with 32 px padding and a 16 px gap.
+
+**Example:**
+
+```tsx
+import ParallaxScrollView from '@/components/parallax-scroll-view';
+import { Image } from 'expo-image';
+
+<ParallaxScrollView
+  headerImage={<Image source={require('@/assets/images/splash-icon.png')} />}
+  headerBackgroundColor={{ dark: '#1a202c', light: '#f5f5f5' }}>
+  <ThemedText type="title">Middle-earth Word Quest</ThemedText>
+</ParallaxScrollView>
+```
+
+---
+
+## HelloWave
+
+**File:** `components/hello-wave.tsx`
+
+A simple animated wave emoji (`👋`) rendered via `Animated.Text` from `react-native-reanimated`. The animation rotates the emoji to 25° at its midpoint, repeating 4 times over a 300 ms duration.
+
+**Props:** None — this component takes no props and renders a self-contained animation.
+
+**Example:**
+
+```tsx
+import { HelloWave } from '@/components/hello-wave';
+
+<HelloWave />
+```
+
+---
+
+<Tip>
+  These components are part of the Expo starter kit scaffold. The core game logic does not depend on most of them — they exist for potential future UI extensions such as a settings screen, an about page, or a tab-based navigation layout.
+</Tip>

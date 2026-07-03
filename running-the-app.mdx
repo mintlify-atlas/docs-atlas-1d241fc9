@@ -1,0 +1,64 @@
+---
+title: "Run Wordle LOTR with Expo Dev Server"
+sidebarTitle: "Running the App"
+description: "Start the Expo development server, launch Wordle LOTR on Android or iOS simulators, and use the reset-project script to restore defaults."
+---
+
+Once the repository is cloned and dependencies are installed, you can start the Expo development server and run Wordle LOTR on a physical device, an emulator, or in a web browser. The `package.json` exposes a set of scripts that cover every common run target — from a quick Metro server start to full native builds for Android and iOS.
+
+## Available Scripts
+
+| Script | Command | Description |
+|---|---|---|
+| `start` | `npm start` | Starts the Expo development server (Metro bundler) |
+| `android` | `npm run android` | Builds and runs the app on a connected Android device or emulator |
+| `ios` | `npm run ios` | Builds and runs the app on the iOS simulator (macOS only) |
+| `web` | `npm run web` | Launches the web build of the app via Expo |
+| `lint` | `npm run lint` | Runs ESLint against the codebase using `expo lint` |
+| `reset-project` | `npm run reset-project` | Runs the reset script to restore the project to a clean initial state |
+
+## Starting the Dev Server
+
+Run the following command from the project root to start the Metro bundler:
+
+```bash
+npx expo start
+```
+
+Once the server is running, a QR code is printed in the terminal. Open the **Expo Go** app on your Android or iOS device, scan the QR code, and Wordle LOTR will load over your local network — no native build step required. The terminal also lets you press `a` to open an Android emulator, `i` for the iOS simulator, or `w` for the web browser directly from the same session.
+
+## Running on Android Emulator
+
+Before running the Android target, make sure an Android Virtual Device (AVD) is already running inside Android Studio, or a physical Android device is connected via USB with developer mode enabled. Then run:
+
+```bash
+npm run android
+```
+
+Expo compiles the native Android project with Gradle and deploys the resulting APK to the active device or emulator automatically.
+
+## Running on iOS Simulator
+
+The iOS target is only available on macOS. Xcode must be installed along with at least one iOS simulator runtime. With those in place, run:
+
+```bash
+npm run ios
+```
+
+Expo will boot the iOS simulator (or use one that is already open) and install the app. On first run, Xcode may prompt you to accept its license agreement.
+
+## Resetting the Project
+
+The `reset-project` script runs `scripts/reset-project.js`, which clears generated files and restores the project directory to its initial scaffolded state:
+
+```bash
+npm run reset-project
+```
+
+<Warning>
+  Running `reset-project` is a destructive operation. It will delete generated output and overwrite project files back to their defaults. Any local changes that have not been committed to version control will be lost. Make sure to commit or stash your work before running this script.
+</Warning>
+
+<Tip>
+  Two things worth noting from `app.json` before you start developing: the app is locked to portrait orientation (`"orientation": "portrait"`), so landscape layouts are intentionally unsupported. React Native's new architecture is also enabled (`"newArchEnabled": true`), meaning the app uses the Fabric renderer and the new JSI-based bridge by default.
+</Tip>

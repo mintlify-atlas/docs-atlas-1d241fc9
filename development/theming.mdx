@@ -1,0 +1,114 @@
+---
+title: "Theming and Styling in Wordle LOTR"
+sidebarTitle: "Theming"
+description: "Learn how Wordle LOTR manages colors, fonts, and game-specific styles using React Native StyleSheet, platform-aware font stacks, and a dark UI theme."
+---
+
+Wordle LOTR uses a fully custom dark theme for the game screen. Two source files carry all visual design tokens: `constants/theme.ts` provides the light/dark color palette and platform-aware font stacks that shared components consume, while `styles/homeStyle.ts` defines every `StyleSheet` rule used by the game screen itself. The game UI deliberately ignores the system color scheme and renders a fixed dark background regardless of user preference.
+
+## Color Constants
+
+`constants/theme.ts` exports a `Colors` object with separate `light` and `dark` maps. These are consumed by `ThemedText`, `ThemedView`, and `Collapsible` via the `useThemeColor` hook.
+
+```ts
+const tintColorLight = '#0a7ea4';
+const tintColorDark = '#fff';
+
+export const Colors = {
+  light: {
+    text: '#11181C',
+    background: '#fff',
+    tint: '#0a7ea4',
+    icon: '#687076',
+    tabIconDefault: '#687076',
+    tabIconSelected: '#0a7ea4',
+  },
+  dark: {
+    text: '#ECEDEE',
+    background: '#151718',
+    tint: '#fff',
+    icon: '#9BA1A6',
+    tabIconDefault: '#9BA1A6',
+    tabIconSelected: '#fff',
+  },
+};
+```
+
+## Font Constants
+
+`constants/theme.ts` also exports a `Fonts` object built with `Platform.select`. Each platform receives a set of four named font stacks: `sans`, `serif`, `rounded`, and `mono`.
+
+```ts
+export const Fonts = Platform.select({
+  ios: {
+    /** iOS UIFontDescriptorSystemDesignDefault */
+    sans: 'system-ui',
+    /** iOS UIFontDescriptorSystemDesignSerif */
+    serif: 'ui-serif',
+    /** iOS UIFontDescriptorSystemDesignRounded */
+    rounded: 'ui-rounded',
+    /** iOS UIFontDescriptorSystemDesignMonospaced */
+    mono: 'ui-monospace',
+  },
+  default: {
+    sans: 'normal',
+    serif: 'serif',
+    rounded: 'normal',
+    mono: 'monospace',
+  },
+  web: {
+    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    serif: "Georgia, 'Times New Roman', serif",
+    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
+    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+  },
+});
+```
+
+The `ios` variant maps directly to Apple's semantic system font descriptors. The `web` variant specifies full CSS font stacks with cross-browser fallbacks. The `default` variant (Android and any other platform) uses React Native's built-in generic font identifiers.
+
+## Game Screen Colors
+
+The game screen (`app/screen/home.tsx`) defines four color constants at module scope. These are applied directly to each letter tile's `backgroundColor` based on the result of `validarIntento`.
+
+```ts
+const COLOR_DEFAULT = '#2d3748'; // Empty box — dark slate
+const COLOR_CORRECT = '#60ce4a'; // Green  — letter is in the correct position
+const COLOR_PRESENT = '#e5ff00'; // Yellow — letter is in the word but wrong position
+const COLOR_ABSENT  = '#4a5568'; // Gray   — letter is not in the word
+```
+
+| Constant | Hex | Meaning |
+|---|---|---|
+| `COLOR_DEFAULT` | `#2d3748` | Unfilled tile — shown before a guess is submitted |
+| `COLOR_CORRECT` | `#60ce4a` | ✅ Correct letter, correct position |
+| `COLOR_PRESENT` | `#e5ff00` | 🟡 Correct letter, wrong position |
+| `COLOR_ABSENT` | `#4a5568` | ⬛ Letter not in the target word |
+
+## Game StyleSheet
+
+All style rules for the game screen live in `styles/homeStyle.ts` and are exported as a single `styles` object created with `StyleSheet.create()`. The table below documents each named style, the element it targets, and its key visual properties.
+
+| Style name | Element | Key properties |
+|---|---|---|
+| `container` | Root `View` | `flex: 1`, `paddingTop: 80`, `alignItems: 'center'`, `backgroundColor: '#1a202c'` |
+| `wordDisplay` | "WORD QUEST" title `Text` | `color: '#ffffff'`, `fontSize: 24`, `fontWeight: 'bold'`, `marginBottom: 20` |
+| `gridContainer` | Letter tile row `View` | `flexDirection: 'row'`, `gap: 6`, `height: 60`, `justifyContent: 'center'`, `alignItems: 'center'` |
+| `box` | Individual letter tile `View` | `width: 45`, `height: 45`, `borderWidth: 2`, `borderColor: '#4a5568'`, `borderRadius: 4` |
+| `boxText` | Letter inside tile `Text` | `color: '#ffffff'`, `fontSize: 20`, `fontWeight: 'bold'` |
+| `input` | Guess `TextInput` | `width: '80%'`, `height: 55`, `backgroundColor: '#2d3748'`, `borderRadius: 8`, `fontSize: 18`, `textAlign: 'center'` |
+| `messageContainer` | Feedback message wrapper `View` | `height: 40`, `justifyContent: 'center'` |
+| `messageText` | Correct/incorrect `Text` | `fontSize: 16`, `fontWeight: 'bold'`, `textAlign: 'center'` |
+| `hintContainer` | Hint block wrapper `View` | `height: 120`, `width: '90%'`, `justifyContent: 'center'`, `alignItems: 'center'` |
+| `hint` | Hint text `Text` | `color: '#a0aec0'`, `fontStyle: 'italic'`, `fontSize: 14`, `lineHeight: 20` |
+| `acceptButton` | "Aceptar" submit `Pressable` | `width: '80%'`, `height: 55`, `backgroundColor: '#132f4e'`, `borderColor: '#4180ae'`, `borderRadius: 8` |
+| `acceptButtonText` | Submit button label `Text` | `color: '#ffffff'`, `fontSize: 16`, `fontWeight: 'bold'` |
+| `answerButton` | "Ver respuesta" reveal `Pressable` | `width: '80%'`, `backgroundColor: '#38a169'`, `borderColor: '#68d391'`, `borderRadius: 8`, `paddingVertical: 14` |
+| `answerButtonText` | Reveal button label `Text` | `color: '#ffffff'`, `fontSize: 16`, `fontWeight: 'bold'` |
+| `answerText` | Revealed answer `Text` | `color: '#ffffff'`, `fontSize: 22`, `fontWeight: 'bold'`, `textAlign: 'center'` |
+| `refreshButton` | "Nueva Palabra" `Pressable` | `marginTop: 'auto'`, `marginBottom: 90`, `paddingVertical: 12`, `paddingHorizontal: 30`, `backgroundColor: '#4a5568'`, `borderRadius: 5` |
+| `label` | Generic label `Text` | `color: '#a0aec0'`, `fontSize: 14`, `marginBottom: 5` |
+
+<Note>
+  The app sets `userInterfaceStyle: "automatic"` in `app.json`, so `ThemedText` and `ThemedView` components do respond to the system dark/light mode preference. However, the game screen itself uses a hard-coded `backgroundColor: '#1a202c'` on its root `View`, overriding any theme-aware background for the playing surface.
+</Note>

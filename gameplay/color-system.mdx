@@ -1,0 +1,102 @@
+---
+title: "Color Feedback System in Wordle LOTR"
+sidebarTitle: "Color System"
+description: "Understand the four tile colors in Wordle LOTR: green for correct position, yellow for wrong position, gray for absent, and dark gray for unguessed."
+---
+
+After every guess in Wordle LOTR, each letter tile in the grid changes color to tell you exactly how that letter relates to the secret word. These colors are the core feedback mechanism of the game — learning to read them quickly is what lets you zero in on the answer in as few guesses as possible.
+
+## Color Meanings
+
+The game uses four distinct colors across the tile grid, each defined as an exact hex value in the source code:
+
+| Color | Hex | Meaning |
+|---|---|---|
+| 🟩 Green | `#60ce4a` | The letter is in the word **and** in the correct position |
+| 🟨 Yellow | `#e5ff00` | The letter is in the word but in the **wrong** position |
+| ⬛ Gray | `#4a5568` | The letter is **not** in the word at all |
+| ◼ Dark Gray | `#2d3748` | The tile has **not been guessed yet** (default/empty state) |
+
+All tiles start as dark gray (`#2d3748`) and only change color once you submit a guess via the **Aceptar** button. The input field itself also uses `#2d3748` as its background, visually tying the unguessed state to the typing experience.
+
+## How the Validation Works
+
+The color assignment is handled by the `validarIntento()` function. It uses a classic two-pass algorithm to handle duplicate letters correctly:
+
+**Pass 1 — Exact matches (green):**
+The function compares each letter in your guess against the letter at the same position in the secret word. When they match, that tile is marked green (`COLOR_CORRECT`). Crucially, both the guess letter and the corresponding secret-word letter are then "nulled out" in a tracking array so they cannot be matched again in the second pass.
+
+**Pass 2 — Present but misplaced (yellow):**
+For every tile that is still marked gray after Pass 1, the function searches the remaining (non-nulled) letters of the secret word for a match. If the letter appears somewhere else in the word, the tile is upgraded to yellow (`COLOR_PRESENT`) and that secret-word letter is nulled out so it cannot produce a second yellow match for the same letter.
+
+Any tile that is still gray after both passes means the letter genuinely does not appear in the secret word at all (`COLOR_ABSENT`, `#4a5568`).
+
+```ts
+// Simplified view of validarIntento() — from app/screen/home.tsx
+const secret = random.nombre.toUpperCase().split('');
+const tryWord = char.toUpperCase().split('');
+const newColors = new Array(tamanio).fill(COLOR_ABSENT);
+const secretRemaining: (string | null)[] = [...secret];
+
+// Pass 1: exact matches → green
+tryWord.forEach((character, i) => {
+    if (character === secret[i]) {
+        newColors[i] = COLOR_CORRECT;
+        secretRemaining[i] = null;
+    }
+});
+
+// Pass 2: present but wrong position → yellow
+tryWord.forEach((character, i) => {
+    if (newColors[i] === COLOR_ABSENT) {
+        const index = secretRemaining.indexOf(character);
+        if (index !== -1) {
+            newColors[i] = COLOR_PRESENT;
+            secretRemaining[index] = null;
+        }
+    }
+});
+```
+
+## Example
+
+### All correct — guessing "FRODO" when the secret is "FRODO"
+
+Every letter matches in both identity and position, so all five tiles turn green after Pass 1. Pass 2 has nothing left to do.
+
+- **F** → 🟩 Green (position 0: correct)
+- **R** → 🟩 Green (position 1: correct)
+- **O** → 🟩 Green (position 2: correct)
+- **D** → 🟩 Green (position 3: correct)
+- **O** → 🟩 Green (position 4: correct)
+
+### Partial match — guessing "BILBO" when the secret is "FRODO"
+
+Walk through both passes step by step:
+
+**Pass 1 (exact matches):**
+- B at position 0 ≠ F → stays gray
+- I at position 1 ≠ R → stays gray
+- L at position 2 ≠ O → stays gray
+- B at position 3 ≠ D → stays gray
+- O at position 4 = O → 🟩 **Green** — nulled out from tracking
+
+**Pass 2 (present elsewhere):**
+- B at position 0 — searching remaining secret letters `[F, R, O, D, null]` — no B found → ⬛ **Gray**
+- I at position 1 — no I in remaining secret → ⬛ **Gray**
+- L at position 2 — no L in remaining secret → ⬛ **Gray**
+- B at position 3 — no B in remaining secret → ⬛ **Gray**
+- O at position 4 — already green, skipped
+
+**Final result:**
+- **B** → ⬛ Gray
+- **I** → ⬛ Gray
+- **L** → ⬛ Gray
+- **B** → ⬛ Gray
+- **O** → 🟩 Green
+
+This tells you the word ends in O, and that B, I, and L are not in the word anywhere — useful information to narrow down your next guess.
+
+<Info>
+  The duplicate-letter handling ensures a letter only gets highlighted as yellow or green as many times as it actually appears in the secret word. If you guess a word with two O's but the secret only has one, only one of your O tiles will light up — exactly consistent with standard Wordle rules.
+</Info>

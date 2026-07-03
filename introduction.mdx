@@ -1,0 +1,46 @@
+---
+title: "Wordle LOTR: Middle-earth Word Guessing Game"
+sidebarTitle: "Introduction"
+description: "Wordle LOTR is a Lord of the Rings themed word-guessing game for Android and iOS, featuring 50+ Middle-earth terms and lore-based hints."
+---
+
+Wordle LOTR is a Lord of the Rings themed word-guessing game built for Android and iOS with React Native and Expo. Players are challenged to identify Middle-earth words — from character names to places and legendary artifacts — using color-coded letter feedback and two lore-based hints per round. Whether you're a seasoned Tolkien reader or a fan of the films, Wordle LOTR puts your knowledge of Middle-earth to the test one word at a time.
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card icon="dragon" title="Middle-earth Dictionary">
+    Every puzzle draws from a curated dictionary of Middle-earth terms spanning characters, locations, creatures, and lore from Tolkien's legendarium.
+  </Card>
+  <Card icon="map" title="Color-coded Feedback">
+    Each letter in your guess is highlighted green (correct position), yellow (wrong position), or grey (not in the word), just like classic Wordle — with a Middle-earth twist.
+  </Card>
+  <Card icon="lightbulb" title="Two Lore Hints per Round">
+    Stuck on a word? Every puzzle includes two lore-based hints drawn straight from the dictionary entry, giving you a nudge without giving the answer away.
+  </Card>
+  <Card icon="mobile" title="Android & iOS Support">
+    Built with React Native and Expo, the app runs on both Android and iOS. Android users can install immediately via a downloadable APK — no app store required.
+  </Card>
+</CardGroup>
+
+## How It Works
+
+<Steps>
+  <Step title="A random Middle-earth word is selected">
+    When a new round begins, the app picks a word at random from the Middle-earth dictionary. The word length varies, and the grid updates automatically to match it.
+  </Step>
+  <Step title="Type a guess and get color-coded feedback">
+    Enter a word of the same length and tap **Aceptar** to submit. Each letter tile changes color — green for a correct letter in the right spot, yellow for a correct letter in the wrong spot, and grey for a letter that isn't in the word at all.
+  </Step>
+  <Step title="Use lore hints to narrow down the answer">
+    Two hints pulled from the word's lore entry are always visible on screen. If you've made three or more attempts without success, a button appears letting you reveal the answer outright and move on.
+  </Step>
+</Steps>
+
+## Tech Stack
+
+Wordle LOTR is built on **React Native 0.81** and **Expo SDK 54**, using **expo-router** for file-based navigation. The codebase is written in **TypeScript** throughout. Animations are handled by **react-native-reanimated**, and a confetti burst powered by **react-native-confetti-cannon** fires off whenever you guess correctly. The project also leverages **expo-haptics** for tactile feedback and **@expo/vector-icons** for UI iconography.
+
+<Note>
+  Wordle LOTR is an independent fan project and is not affiliated with or endorsed by the Tolkien Estate or any rights holder. Android users can install it directly by downloading the APK — no Play Store account required.
+</Note>

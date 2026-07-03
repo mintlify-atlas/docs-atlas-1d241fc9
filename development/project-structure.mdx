@@ -1,0 +1,87 @@
+---
+title: "Wordle LOTR Project Structure and Codebase Layout"
+sidebarTitle: "Project Structure"
+description: "Understand the Wordle LOTR repository layout: app screens, shared components, dictionary, styles, constants, and Expo configuration files."
+---
+
+Wordle LOTR is built with [Expo](https://expo.dev) and uses **Expo Router** for file-based navigation. Every file inside the `app/` directory maps directly to a route, and TypeScript is used throughout the entire codebase — from game logic and component props to the dictionary schema and StyleSheet definitions.
+
+## Directory Layout
+
+```text
+Wordle-LOTR-RN/
+├── app/
+│   ├── index.tsx          # Entry point — redirects to /screen/home
+│   └── screen/
+│       └── home.tsx       # Main game screen
+├── components/
+│   ├── external-link.tsx  # In-app browser link component
+│   ├── haptic-tab.tsx     # Tab bar button with haptic feedback
+│   ├── hello-wave.tsx     # Animated wave emoji component
+│   ├── parallax-scroll-view.tsx  # Parallax header scroll view
+│   ├── themed-text.tsx    # Text with light/dark theme support
+│   ├── themed-view.tsx    # View with light/dark theme support
+│   └── ui/
+│       ├── collapsible.tsx      # Collapsible section component
+│       ├── icon-symbol.tsx      # Cross-platform SF Symbol / Material icon
+│       └── icon-symbol.ios.tsx  # iOS-specific icon implementation
+├── constants/
+│   └── theme.ts           # Colors and Fonts constants
+├── Dictionary/
+│   └── dictionary.tsx     # wordItem interface + 50-entry word bank
+├── styles/
+│   └── homeStyle.ts       # StyleSheet for the home game screen
+├── assets/
+│   └── images/            # App icon, splash screen, screenshots
+├── scripts/
+│   └── reset-project.js   # Resets app to clean Expo starter state
+├── app.json               # Expo configuration
+├── package.json           # Dependencies and scripts
+└── tsconfig.json          # TypeScript configuration
+```
+
+## Key Files
+
+### `app/index.tsx`
+
+The root entry point of the app. It contains a single `<Redirect href="/screen/home" />` from `expo-router`, which immediately forwards any visitor of the root URL to the main game screen. No game logic lives here.
+
+### `app/screen/home.tsx`
+
+The heart of the application. All game state and UI reside in this single component. It handles:
+
+- **State management** — current guess (`char`), color feedback (`colors`), message display (`mensaje`), answer reveal (`showAnswer`), confetti (`showConfetti`), and guess counter (`counter`)
+- **Word selection** — a random `wordItem` is chosen from the `dictionary` array on mount and on each new-word refresh
+- **Guess validation** (`validarIntento`) — compares the typed guess against the secret word and produces per-letter color feedback using a two-pass algorithm (correct position first, then present-but-wrong-position)
+- **Hint and reveal** — two hint texts (`explicacion`, `explicacion2`) are displayed at all times; a reveal button appears after 3 failed attempts
+- **Confetti** — a `ConfettiCannon` fires when the player guesses correctly
+
+### `Dictionary/dictionary.tsx`
+
+Exports two things: the `wordItem` TypeScript interface and the `dictionary` array containing 50+ Middle-earth entries. Each entry has a canonical name (`nombre`) and three lore-based clues (`explicacion`, `explicacion2`, `explicacion3`). The hints are written in Spanish.
+
+### `styles/homeStyle.ts`
+
+Contains all `StyleSheet.create()` definitions for `app/screen/home.tsx`. Keeping styles in a dedicated file ensures the JSX in the game screen remains readable and that styles are reusable without inline objects.
+
+### `constants/theme.ts`
+
+Exports two constants used across the shared component layer:
+
+- `Colors` — light and dark color palettes for text, background, tint, and icon colors
+- `Fonts` — platform-specific font stacks selected via `Platform.select` for iOS, Android, and web
+
+## Routing
+
+Expo Router treats the `app/` directory as a route tree. The project currently defines a single real screen:
+
+| File | Route |
+|---|---|
+| `app/index.tsx` | `/` → redirects to `/screen/home` |
+| `app/screen/home.tsx` | `/screen/home` |
+
+The deep-link URL scheme is `wordlelotr://`, defined by the `scheme` field in `app.json`. This means the home screen is reachable at `wordlelotr://screen/home` from external apps or device links.
+
+<Note>
+  This project uses Expo's New Architecture (`newArchEnabled: true`), React Compiler (`reactCompiler: true`), and typed routes (`typedRoutes: true`). All three are enabled in `app.json` under the `experiments` block, providing better runtime performance, automatic memoization, and compile-time route safety respectively.
+</Note>

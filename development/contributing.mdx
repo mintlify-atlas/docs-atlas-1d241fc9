@@ -1,0 +1,144 @@
+---
+title: "Contributing to Wordle LOTR"
+sidebarTitle: "Contributing"
+description: "Learn how to contribute to Wordle LOTR: add new words to the dictionary, fix bugs, improve the UI, and follow the TypeScript and ESLint code style."
+---
+
+Wordle LOTR is an open-source project and welcomes contributions of all kinds. The most impactful and accessible contribution is expanding the Middle-earth dictionary — every new entry directly enriches the gameplay experience with more of Tolkien's world. Bug fixes, style improvements, and new features are equally welcome.
+
+## Adding Words to the Dictionary
+
+The dictionary lives in a single file and requires no build tooling to edit. Each entry is a plain TypeScript object.
+
+<Steps>
+  <Step title="Open Dictionary/dictionary.tsx">
+    Navigate to `Dictionary/dictionary.tsx` in the project root. The file exports a `wordItem` interface and the `dictionary` array.
+
+    The `wordItem` interface is:
+
+    ```ts
+    export interface wordItem {
+      nombre: string;      // The canonical Middle-earth word or name
+      explicacion: string; // First in-game hint
+      explicacion2: string; // Second in-game hint
+      explicacion3: string; // Third hint (currently stored but not displayed in-game)
+    }
+    ```
+  </Step>
+  <Step title="Add a new wordItem object to the array">
+    Append a new object to the `dictionary` array, following the existing format. All four fields are required.
+
+    ```tsx dictionary.tsx
+    {
+      "nombre": "Narsil",
+      "explicacion": "La espada de Elendil, rota por Sauron en la Guerra de la Última Alianza.",
+      "explicacion2": "El Flama del Occidente, la espada de Aragorn, reforgada en Rivendel.",
+      "explicacion3": "Su refabricación simboliza el retorno del rey legítimo de Gondor."
+    }
+    ```
+  </Step>
+  <Step title="Verify canonical spelling">
+    Make sure `nombre` matches the exact canonical spelling from Tolkien's published works (e.g., *The Lord of the Rings*, *The Silmarillion*, *Unfinished Tales*). The game compares player input against this string case-insensitively, so a misspelling in `nombre` creates an unsolvable puzzle.
+  </Step>
+  <Step title="Write lore-accurate hints in Spanish">
+    Write `explicacion` and `explicacion2` as in-game clues — in Spanish, lore-accurate, and crafted so they hint at the answer without immediately naming it. The hints should guide a player familiar with Middle-earth toward the answer, not give it away on the first read.
+  </Step>
+  <Step title="Test your entry">
+    Run the app with `npm run start` and use the "Nueva Palabra" button to cycle through words until yours appears, or temporarily move your entry to the top of the `dictionary` array for direct testing.
+  </Step>
+</Steps>
+
+## Code Style
+
+The project enforces a consistent code style through TypeScript's strict mode and ESLint.
+
+**TypeScript**
+
+`tsconfig.json` enables `"strict": true`, which turns on the full suite of TypeScript strict checks including `strictNullChecks`, `strictFunctionTypes`, and `noImplicitAny`. All new code must pass type-checking without errors or `@ts-ignore` suppressions.
+
+**ESLint**
+
+ESLint is configured in `eslint.config.js` using the flat config format with `eslint-config-expo`:
+
+```js
+const { defineConfig } = require('eslint/config');
+const expoConfig = require('eslint-config-expo/flat');
+
+module.exports = defineConfig([
+  expoConfig,
+  {
+    ignores: ['dist/*'],
+  },
+]);
+```
+
+Run the linter before opening a pull request:
+
+```bash
+npm run lint
+```
+
+Fix all reported warnings and errors before submitting. The `dist/` directory is excluded from linting automatically.
+
+## Project Conventions
+
+Follow these conventions when adding or modifying code so the codebase stays consistent:
+
+**File naming**
+
+Use kebab-case for all filenames:
+
+```text
+✅ haptic-tab.tsx
+✅ themed-text.tsx
+✅ homeStyle.ts
+❌ HapticTab.tsx
+❌ themedText.tsx
+```
+
+**Component exports**
+
+Prefer named exports over default exports for components in the `components/` directory:
+
+```tsx
+// ✅ Named export
+export function ThemedText({ ... }: ThemedTextProps) { ... }
+
+// ❌ Avoid default export for shared components
+export default function ThemedText(...) { ... }
+```
+
+Screen components in `app/` use default exports as required by Expo Router's file-based routing convention.
+
+**Styles**
+
+Always use `StyleSheet.create()` in a dedicated styles file or at the bottom of the component file. Do not use inline style objects in JSX — they create new object references on every render and bypass React Native's style flattening:
+
+```tsx
+// ✅ Correct
+const styles = StyleSheet.create({ container: { flex: 1 } });
+<View style={styles.container} />
+
+// ❌ Avoid
+<View style={{ flex: 1 }} />
+```
+
+**State management**
+
+The project uses no external state management library. All state is managed with component-level `useState` hooks. Keep state as close as possible to where it is used — do not lift state unnecessarily.
+
+## Reporting Issues
+
+Bug reports, feature requests, and questions are tracked on GitHub:
+
+**[https://github.com/PixelGenetics/Wordle-LOTR-RN](https://github.com/PixelGenetics/Wordle-LOTR-RN)**
+
+When reporting a bug, include:
+- The platform you are running on (iOS / Android / web)
+- The Expo SDK version (found in `package.json`)
+- Steps to reproduce the issue
+- The word entry involved, if the bug is dictionary-related
+
+<Tip>
+  If you want to inspect or test a new dictionary entry without running the full app, you can review `Dictionary/dictionary.tsx` directly — the file is pure TypeScript with no build step, JSX, or external dependencies. Any text editor will render it clearly.
+</Tip>

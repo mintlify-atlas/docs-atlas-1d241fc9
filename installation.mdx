@@ -1,0 +1,90 @@
+---
+title: "Install Wordle LOTR on Android or Build from Source"
+sidebarTitle: "Installation"
+description: "Download the Wordle LOTR APK to install directly on Android, or clone the repository and build locally with Expo and Node.js."
+---
+
+There are two ways to get Wordle LOTR running on your device. The quickest path is to download the pre-built APK and sideload it onto any Android device — no developer tools required. If you want to run the app on iOS, experiment with the code, or contribute to the project, you can clone the repository and build it locally using Expo and Node.js.
+
+## Install via APK
+
+<Steps>
+  <Step title="Download the APK">
+    Download the latest Wordle LOTR APK from Google Drive:
+
+    [**Download Wordle LOTR APK →**](https://drive.google.com/file/d/1xuu6DXFEh9YqARt_4hQ7-Jk57GyoqU7Y/view?usp=drive_link)
+
+    Once the file has downloaded, open it from your notifications bar or your device's Downloads folder to launch the installer.
+  </Step>
+  <Step title="Handle the security prompt">
+    Android may display a security warning because the APK comes from outside the Play Store. You have two options:
+
+    - **Skip the scan:** Tap **More details**, then select **Install without scanning** to proceed immediately.
+    - **Allow Android to scan:** Tap the scan option and wait a few minutes while Google Play Protect checks the file. The installation will continue once the scan completes.
+
+    Either path leads to the same result — a fully installed app on your device.
+  </Step>
+  <Step title="Open the app">
+    When the installation finishes, tap **Open** to launch Wordle LOTR straight away. You can also find it in your app drawer like any other installed app.
+  </Step>
+</Steps>
+
+<Note>
+  The pre-built APK targets Android only. iOS does not support sideloading outside of TestFlight or the App Store, so iPhone and iPad users must build the app from source using the steps below.
+</Note>
+
+## Build from Source
+
+<Steps>
+  <Step title="Install prerequisites">
+    Make sure the following tools are installed on your machine before continuing:
+
+    - **Node.js 18 or later** — [nodejs.org](https://nodejs.org)
+    - **Git** — [git-scm.com](https://git-scm.com)
+    - **Expo CLI** — install globally with:
+
+    ```bash
+    npm install -g expo-cli
+    ```
+  </Step>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/PixelGenetics/Wordle-LOTR-RN.git && cd Wordle-LOTR-RN
+    ```
+  </Step>
+  <Step title="Install dependencies">
+    <CodeGroup>
+      ```bash npm
+      npm install
+      ```
+      ```bash yarn
+      yarn install
+      ```
+      ```bash pnpm
+      pnpm install
+      ```
+    </CodeGroup>
+  </Step>
+  <Step title="Build and run on Android">
+    A connected Android device or a running Android Studio emulator is required. Make sure Android Studio and the Android SDK are installed, then run:
+
+    ```bash
+    npx expo run:android
+    ```
+
+    Expo will compile the native Android project and deploy it to your device or emulator automatically.
+  </Step>
+  <Step title="Build and run on iOS">
+    iOS builds require macOS with Xcode installed. On a Mac, run:
+
+    ```bash
+    npx expo run:ios
+    ```
+
+    Expo will open the iOS Simulator and launch the app once the build completes.
+  </Step>
+</Steps>
+
+<Tip>
+  You don't need a full native build to try out the app. Run `npx expo start` to launch the Metro bundler, then scan the QR code with the **Expo Go** app on your phone (available on the App Store and Google Play) to load Wordle LOTR instantly over your local network — no Android Studio or Xcode required.
+</Tip>
